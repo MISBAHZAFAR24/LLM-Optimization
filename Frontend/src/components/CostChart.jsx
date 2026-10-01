@@ -1,0 +1,5 @@
+export default function CostChart({ records = [] }) {
+  const bars = records.map((record) => ({ label: record.model.split(' ')[0], value: Number(record.cost) }))
+  const maximum = Math.max(...bars.map((bar) => bar.value), 1)
+  return <section className="panel chart-panel"><div className="panel-heading"><div><p className="eyebrow">Spend overview</p><h2>Cost by model</h2></div><span className="live-pill"><i />Live</span></div><div className="chart-legend"><span><i className="legend-dot spend" />Backend spend</span></div><div className="chart"><div className="y-axis"><span>${Math.round(maximum / 1000)}k</span><span>${Math.round(maximum * .66 / 1000)}k</span><span>${Math.round(maximum * .33 / 1000)}k</span><span>$0</span></div><div className="plot"><div className="grid-lines"><i /><i /><i /><i /></div><div className="bars">{bars.map((bar) => <div className="bar-wrap" key={bar.label}><div className="bar" style={{ height: `${Math.max((bar.value / maximum) * 100, 5)}%` }} /><span>{bar.label}</span></div>)}</div></div></div></section>
+}

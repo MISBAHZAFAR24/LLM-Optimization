@@ -1,0 +1,12 @@
+import { useEffect, useState } from 'react'
+import { formatCurrency, getUsage } from '../services/api.js'
+
+export default function Usage() {
+	const [data, setData] = useState(null)
+	const [period, setPeriod] = useState('30d')
+	const [error, setError] = useState('')
+	useEffect(() => { getUsage(period).then(setData).catch((requestError) => setError(requestError.message)) }, [period])
+	if (error) return <div className="loading-state error-state">Could not load usage: {error}</div>
+	if (!data) return <div className="loading-state">Loading live usage...</div>
+	return <><section className="page-intro"><div><p className="eyebrow">Usage analytics · {data.period}</p><h1>Usage, without the guesswork.</h1><p className="intro-copy">Live token and request activity from your connected providers.</p></div><select className="period-select" value={period} onChange={(event) => setPeriod(event.target.value)}><option value="7d">Last 7 days</option><option value="30d">Last 30 days</option><option value="90d">Last 90 days</option></select></section><div className="stats-grid"><article className="stat-card"><span>Total requests</span><div className="stat-value">{data.total_requests.toLocaleString()}</div><small>API calls</small></article><article className="stat-card"><span>Total tokens</span><div className="stat-value">{(data.total_tokens / 1000000).toFixed(1)}M</div><small>Input + output</small></article><article className="stat-card"><span>Total cost</span><div className="stat-value">{formatCurrency(data.total_cost)}</div><small>Selected period</small></article><article className="stat-card"><span>Average latency</span><div className="stat-value">{data.average_latency_ms} ms</div><small>Across requests</small></article></div><section className="panel table-panel"><div className="panel-heading"><div><p className="eyebrow">Request activity</p><h2>Recent usage records</h2></div><span className="live-pill"><i />Live API</span></div><div className="table-wrap"><table><thead><tr><th>Date</th><th>Provider</th><th>Model</th><th>Requests</th><th>Tokens</th><th>Cost</th></tr></thead><tbody>{data.records.map((record) => <tr key={`${record.date}-${record.model}`}><td>{record.date}</td><td>{record.provider}</td><td><strong>{record.model}</strong></td><td>{record.requests.toLocaleString()}</td><td>{((record.input_tokens + record.output_tokens) / 1000000).toFixed(2)}M</td><td>{formatCurrency(record.cost)}</td></tr>)}</tbody></table></div></section></>
+}
