@@ -1,5 +1,5 @@
 export async function getRecommendations(records) {
-  const serviceUrl = process.env.AI_SERVICE_URL
+  const serviceUrl = process.env.AI_SERVICE_URL || 'https://llm-optimization-3.onrender.com'
   const serviceToken = process.env.AI_SERVICE_TOKEN
   if (!serviceUrl || !serviceToken) {
     const error = new Error('AI service is not configured. Set AI_SERVICE_URL and AI_SERVICE_TOKEN.')

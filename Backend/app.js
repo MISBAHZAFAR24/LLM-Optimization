@@ -9,7 +9,7 @@ import usageRoutes from './routes/usageRoutes.js'
 import { errorMiddleware } from './middleware/errorMiddleware.js'
 
 const app = express()
-const origins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173,http://127.0.0.1:5173')
+const origins = (process.env.FRONTEND_ORIGIN || 'https://llm-optimization.vercel.app,http://localhost:5173,http://127.0.0.1:5173')
   .split(',').map((origin) => origin.trim())
 
 app.use(cors({ origin: origins }))
