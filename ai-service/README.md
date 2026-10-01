@@ -13,6 +13,14 @@ python -m pip install -r requirements.txt
 python -m uvicorn app.main:app --host 127.0.0.1 --port 3001 --reload
 ```
 
+## Deploy on Render
+
+Set the service root directory to `ai-service` and use this start command:
+
+```bash
+python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
 The health endpoint is `/health`. The protected recommendation endpoint is `POST /api/optimization/recommendations`; it accepts `{"records": [...]}` from the backend. Never put the AI service token in the frontend.
 
 Run tests with:
